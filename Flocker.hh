@@ -34,9 +34,9 @@ class Flocker : public Creature
 {
 public:
 
-  glm::vec3 separation_force;
-  glm::vec3 alignment_force;
-  glm::vec3 cohesion_force;
+  glm::vec3 separation_force; //only this is needed
+  //glm::vec3 alignment_force;
+  //glm::vec3 cohesion_force;
 
   double random_force_limit;
 
@@ -45,6 +45,7 @@ public:
   double max_separation_distance, max_squared_separation_distance;
   double inv_range_squared_separation_distance;
 
+  /*
   double alignment_weight;
   double min_alignment_distance, min_squared_alignment_distance;
   double max_alignment_distance, max_squared_alignment_distance;
@@ -60,15 +61,15 @@ public:
   double min_fear_distance, min_squared_fear_distance;
   double max_fear_distance, max_squared_fear_distance;
   double inv_range_squared_fear_distance;
-
+  */
   Flocker(int,                    // index
 	  double, double, double, // initial position
 	  double, double, double, // initial velocity
 	  double,                 // random uniform acceleration limit
 	  double, double, double, // min, max separation distance, weight
-	  double, double, double, // min, max alignment distance, weight
-	  double, double, double, // min, max cohesion distance, weight
-	  double, double, double, // min, max predator fear stuff
+	 // double, double, double, // min, max alignment distance, weight
+	 // double, double, double, // min, max cohesion distance, weight
+	 // double, double, double, // min, max predator fear stuff
 	  float, float, float,    // base color
 	  int = 1);               // number of past states to save
 
@@ -76,9 +77,9 @@ public:
   void draw(glm::mat4);
   void update();
   bool compute_separation_force();
-  bool compute_alignment_force();
-  bool compute_cohesion_force();
-  bool compute_scary_force();
+ //bool compute_alignment_force();
+ //bool compute_cohesion_force();
+ //bool compute_scary_force();
 
 };
 

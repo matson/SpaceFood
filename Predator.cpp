@@ -1,12 +1,7 @@
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 //
-// "Creature Box" -- flocking app
-//
-// by Christopher Rasmussen
-//
-// CISC 440/640, March, 2014
-// updated to OpenGL 3.3, March, 2016
+//Predator = Rocketship?
 //
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
@@ -59,6 +54,7 @@ Predator::Predator(int _index,
 }
 
 //----------------------------------------------------------------------------
+//draws Predator, will be the rocket instead.
 
 void Predator::draw(glm::mat4 Model)
 {
@@ -207,6 +203,8 @@ void Predator::draw(glm::mat4 Model)
 	
 }
 
+//Forces of Predator
+
 bool Predator::compute_hungry_force()
 {
 	//calculate the lowest distance from the predator to the flocker and set it to move in that direction
@@ -252,6 +250,7 @@ bool Predator::compute_hungry_force()
 	}
 
 }
+
 
 //----------------------------------------------------------------------------
 
@@ -305,12 +304,11 @@ void Predator::update()
 	// update position
 
 	new_position = position + new_velocity;   // scale new_velocity by dt?
-}
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-/*
-	//
+
+
+
+	
 	double random_force_limit = 0.6;
 	acceleration = glm::vec3(0, 0, 0);
 	glm::vec3 separation_force = glm::vec3(0, 0, 0);
@@ -321,7 +319,7 @@ void Predator::update()
 
 	acceleration += 0;// separation_force;
 
-	//compute_alignment_force();
+	
 	acceleration += 0;// alignment_force;
 
 	//compute_cohesion_force();
@@ -329,7 +327,7 @@ void Predator::update()
 
 
 
-	// randomness
+	
 
 	if (random_force_limit > 0.0) {
 		acceleration.x += uniform_random(-random_force_limit, random_force_limit);
@@ -337,25 +335,23 @@ void Predator::update()
 		acceleration.z += uniform_random(-random_force_limit, random_force_limit);
 	}
 
-	// update velocity
+	
 
 	new_velocity = velocity + acceleration;   // scale acceleration by dt?
 
-	// limit velocity
-
+	
+	/*
 	double mag = glm::length(new_velocity);
-	if (mag > MAX_FLOCKER_SPEED)
+	if (mag > MAX_FLOCKER_SPEED) {
 		new_velocity *= (float)(MAX_FLOCKER_SPEED / mag);
+	}
+	*/
 
-	// update position
-
-	new_position = position + new_velocity;
-
-
-
+	//new_position = position + new_velocity;
+}
 
 
 
 
 
-*/
+

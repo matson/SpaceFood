@@ -79,15 +79,17 @@ Flocker::Flocker(int _index,
 	double init_vx, double init_vy, double init_vz,
 	double rand_force_limit,
 	double min_separate_distance, double max_separate_distance, double separate_weight,
-	double min_align_distance, double max_align_distance, double align_weight,
-	double min_cohere_distance, double max_cohere_distance, double cohere_weight,
-	double min_scary_distance, double max_scary_distance, double scary_weight,
+	//double min_align_distance, double max_align_distance, double align_weight,
+	//double min_cohere_distance, double max_cohere_distance, double cohere_weight,
+	//double min_scary_distance, double max_scary_distance, double scary_weight,
 	float r, float g, float b,
 	int max_hist) : Creature(_index, init_x, init_y, init_z, init_vx, init_vy, init_vz, r, g, b, max_hist)
 { 
-	random_force_limit = rand_force_limit;
 
-	separation_weight = separate_weight;
+
+	random_force_limit = rand_force_limit; //need random force for food
+
+	separation_weight = separate_weight; //May need this
 
 	min_separation_distance = min_separate_distance;
 	min_squared_separation_distance = min_separation_distance * min_separation_distance;
@@ -96,7 +98,7 @@ Flocker::Flocker(int _index,
 	max_squared_separation_distance = max_separation_distance * max_separation_distance;
 
 	inv_range_squared_separation_distance = 1.0 / (max_squared_separation_distance - min_squared_separation_distance);
-
+/*
 	alignment_weight = align_weight;
 
 	min_alignment_distance = min_align_distance;
@@ -117,7 +119,8 @@ Flocker::Flocker(int _index,
 
 	inv_range_squared_cohesion_distance = 1.0 / (max_squared_cohesion_distance - min_squared_cohesion_distance);
 	
-	//fear stuff
+	//fear stuff //do not need this anymore.
+	
 	fear_weight = scary_weight;
 	
 	min_fear_distance = min_scary_distance;
@@ -127,6 +130,8 @@ Flocker::Flocker(int _index,
 	max_squared_fear_distance = max_fear_distance * max_fear_distance;
 
 	inv_range_squared_fear_distance = 1.0 / (max_squared_fear_distance - min_squared_fear_distance);
+	
+*/
 }
 
 //----------------------------------------------------------------------------
@@ -516,7 +521,8 @@ bool Flocker::compute_separation_force()
 // http://libcinder.org/docs/dev/flocking_chapter4.html
 
 // side effect is putting values into ALIGNMENT_FORCE vector
-
+//no need for these functions
+/*
 bool Flocker::compute_alignment_force()
 {
   int j;
@@ -566,6 +572,7 @@ bool Flocker::compute_alignment_force()
     return false;
 }
 
+*/
 //----------------------------------------------------------------------------
 
 // based on:
@@ -573,7 +580,7 @@ bool Flocker::compute_alignment_force()
 // http://libcinder.org/docs/dev/flocking_chapter3.html
 
 // side effect is putting values into COHESION_FORCE vector
-
+/*
 bool Flocker::compute_cohesion_force()
 {
   int j;
@@ -622,8 +629,9 @@ bool Flocker::compute_cohesion_force()
   else
     return false;
 }
-
+*/
 //----------------------------------------------------------------------------
+/*
 //compute fear force here
 bool Flocker::compute_scary_force()
 {
@@ -656,7 +664,8 @@ bool Flocker::compute_scary_force()
 
 
 // apply physics
-
+*/
+//need this still to update food.
 void Flocker::update()
 {
   // set accelerations (aka forces)
@@ -664,23 +673,23 @@ void Flocker::update()
   acceleration = glm::vec3(0, 0, 0);
   
   // deterministic behaviors
-  
+ /*
   //insert fear updates here:
   compute_scary_force();
   acceleration += fear_force;
-
+  */
   compute_separation_force();
   acceleration += separation_force;
-
+  /*
   compute_alignment_force();
   acceleration += alignment_force;
 
   compute_cohesion_force();
   acceleration += cohesion_force;
-
+  */
   draw_color.r = glm::length(separation_force);
-  draw_color.g = glm::length(alignment_force);
-  draw_color.b = glm::length(cohesion_force);
+  //draw_color.g = glm::length(alignment_force);
+  //draw_color.b = glm::length(cohesion_force);
   if (draw_color.r > 0 || draw_color.g > 0 || draw_color.b > 0)
     draw_color = glm::normalize(draw_color);
   else 

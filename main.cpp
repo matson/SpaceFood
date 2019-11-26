@@ -380,9 +380,9 @@ void initialize_flocking_simulation()
 			uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01),
 			0.002,            // randomness
 			0.05, 0.5, uniform_random(0.01, 0.03),  // min, max separation distance, weight
-			0.5, 1.0, uniform_random(0.0005, 0.002), // min, max alignment distance, weight
-			1.0, 1.5, uniform_random(0.0005, 0.002), // min, max cohesion distance, weight
-			1.0, 1.5, uniform_random(0.01, 0.03),  // min, max fear stuff
+			//0.5, 1.0, uniform_random(0.0005, 0.002), // min, max alignment distance, weight
+			//1.0, 1.5, uniform_random(0.0005, 0.002), // min, max cohesion distance, weight
+			//1.0, 1.5, uniform_random(0.01, 0.03),  // min, max fear stuff
 		  //					  0.05, 0.5, 0.02,  // min, max separation distance, weight
 		  //					  0.5,  1.0, 0.001, // min, max alignment distance, weight
 		  //					  1.0,  1.5, 0.001, // min, max cohesion distance, weight
@@ -392,10 +392,11 @@ void initialize_flocking_simulation()
 		flocker_squared_distance[i].resize(num_flockers);
 	}
 	//no need for looping
+	/*
 	predator_array.push_back(new Predator(0, 2.0, 4.0, 4.0,
 		uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01), 0.002,
 		1.0, 1.5, uniform_random(0.01, 0.03), 1.0, 1.0, 1.0, 30));
-			
+	*/
 	}
 
 
@@ -415,16 +416,16 @@ void update_flocking_simulation()
   // get new_position, new_velocity for each flocker
 
   for (i = 0; i < flocker_array.size(); i++) 
-    flocker_array[i]->update();
+    flocker_array[4]->update(); //draws only one.
 
-  predator_array[0]->update();  //update done here for predator.
+  //predator_array[0]->update();  //update done here for predator.
   
 
   for (i = 0; i < flocker_array.size(); i++) 
     flocker_array[i]->finalize_update(box_width, box_height, box_depth);
 
   
-  predator_array[0]->finalize_update(box_width, box_height, box_depth);
+  //predator_array[0]->finalize_update(box_width, box_height, box_depth);
 }
 
 //----------------------------------------------------------------------------
@@ -464,36 +465,36 @@ void setup_camera()
 void load_objects_and_textures(int argc, char **argv)
 {
   if (argc == 1) {
-    loadOBJ("cube.obj", obj_vertices, obj_uvs, obj_normals);
-    obj_Texture = loadDDS("uvmap.DDS");
+    loadOBJ("apple.obj", obj_vertices, obj_uvs, obj_normals);
+    obj_Texture = loadDDS("apple_texture.DDS"); //works for this shape?
   }
   else if (!strcmp("cube", argv[1])) {
-    loadOBJ("cube.obj", obj_vertices, obj_uvs, obj_normals);
-    obj_Texture = loadDDS("uvmap.DDS");
+    loadOBJ("apple_success.obj", obj_vertices, obj_uvs, obj_normals);
+    obj_Texture = loadBMP_custom("apple_paint_new.bmp"); //does not change?
   }
   else if (!strcmp("suzanne", argv[1])) {
     loadOBJ("suzanne.obj", obj_vertices, obj_uvs, obj_normals);
     obj_Texture = loadDDS("uvmap.DDS");
   }
   else if (!strcmp("banana", argv[1])) {
-    loadOBJ("banana.obj", obj_vertices, obj_uvs, obj_normals);
-    obj_Texture = loadBMP_custom("banana.bmp");
+    loadOBJ("first_donut.obj", obj_vertices, obj_uvs, obj_normals);
+    obj_Texture = loadBMP_custom("first_doughnut_texture.bmp");
   }
   else {
     printf("unsupported object\n");
     exit(1);
   }
 
-  // if not doing bullet demo, scale down objects to creature size -- kind of eye-balled this
-
+  //scale up the objects.
+  
   if (argc < 3) {
     for (int i = 0; i < obj_vertices.size(); i++) {
-      obj_vertices[i].x *= 0.15;
-      obj_vertices[i].y *= 0.15;
-      obj_vertices[i].z *= 0.15;
+      obj_vertices[i].x *= 2.15;
+      obj_vertices[i].y *= 2.15;
+      obj_vertices[i].z *= 2.15;
     }
   }
-
+  
   indexVBO(obj_vertices, obj_uvs, obj_normals, obj_indices, obj_indexed_vertices, obj_indexed_uvs, obj_indexed_normals);
 
   // Load into array buffers
@@ -666,7 +667,7 @@ int main(int argc, char **argv)
 		flocker_array[i]->draw(M);
 	}
 	
-		predator_array[0]->draw(M);
+		//predator_array[0]->draw(M); //future rocket
 		//need to reference the predator
 
 
