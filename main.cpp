@@ -392,11 +392,11 @@ void initialize_flocking_simulation()
 		flocker_squared_distance[i].resize(num_flockers);
 	}
 	//no need for looping
-	/*
+	
 	predator_array.push_back(new Predator(0, 2.0, 4.0, 4.0,
 		uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01), 0.002,
 		1.0, 1.5, uniform_random(0.01, 0.03), 1.0, 1.0, 1.0, 30));
-	*/
+	
 	}
 
 
@@ -418,14 +418,14 @@ void update_flocking_simulation()
   for (i = 0; i < flocker_array.size(); i++) 
     flocker_array[4]->update(); //draws only one.
 
-  //predator_array[0]->update();  //update done here for predator.
+  predator_array[0]->update();  //update done here for predator.
   
 
   for (i = 0; i < flocker_array.size(); i++) 
     flocker_array[i]->finalize_update(box_width, box_height, box_depth);
 
   
-  //predator_array[0]->finalize_update(box_width, box_height, box_depth);
+  predator_array[0]->finalize_update(box_width, box_height, box_depth);
 }
 
 //----------------------------------------------------------------------------
@@ -438,17 +438,29 @@ void setup_camera()
 
   if (camera_mode == CAMERA_MODE_ORBIT) {
     
-    double orbit_cam_azimuth = glm::radians(orbit_cam_longitude_degs);
-    double orbit_cam_inclination = glm::radians(90.0 - orbit_cam_latitude_degs);
-    
+	
+	//old camera 
+	  
+    //double orbit_cam_azimuth = glm::radians(orbit_cam_longitude_degs);
+    //double orbit_cam_inclination = glm::radians(90.0 - orbit_cam_latitude_degs);
+    /*
     double x_cam = orbit_cam_radius * sin(orbit_cam_inclination) * cos(orbit_cam_azimuth); // 0.5 * box_width;
     double z_cam = orbit_cam_radius * sin(orbit_cam_inclination) * sin(orbit_cam_azimuth); // 0.5 * box_height;
     double y_cam = orbit_cam_radius * cos(orbit_cam_inclination); // 15.0;
     
-    ViewMat = glm::lookAt(glm::vec3(x_cam, y_cam, z_cam),   // Camera location in World Space
-			  glm::vec3(0,0,0),                 // and looks at the origin
+	ViewMat = glm::lookAt(glm::vec3(x_cam, y_cam, z_cam),   // Camera location in World Space
+			  glm::vec3(0,0,0), // and looks at the origin
 			  glm::vec3(0,-1,0)                  // Head is up (set to 0,-1,0 to look upside-down)
 			  );
+	*/
+
+	  //new camera which should follow our spaceship
+	 
+	  vec3 spaceshipPosition = glm::vec3(predator_array[0]->position);
+	  vec3 cameraPosition = spaceshipPosition + glm::vec3(5.0f, 3.0f, 5.0f) ;
+	  ViewMat = glm::lookAt(cameraPosition,
+		  spaceshipPosition, glm::vec3(0, -1, 0));
+		  
   }
   else {
     
@@ -667,7 +679,7 @@ int main(int argc, char **argv)
 		flocker_array[i]->draw(M);
 	}
 	
-		//predator_array[0]->draw(M); //future rocket
+		predator_array[0]->draw(M); //future rocket
 		//need to reference the predator
 
 
