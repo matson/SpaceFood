@@ -135,6 +135,8 @@ extern vector <vector <double> > flocker_squared_distance;
 GLuint box_vertexbuffer;
 GLuint box_colorbuffer;
 
+double spaceship_angle = .02; 
+
 
 //----------------------------------------------------------------------------
 
@@ -209,52 +211,56 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
   // quit
 
-  if (key == GLFW_KEY_Q && action == GLFW_PRESS)
-    end_program();
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		end_program();
 
-  // pause
+	// pause
 
-  else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-    is_paused = !is_paused;
+	else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+		is_paused = !is_paused;
 
 
-  // toggle physics/flocking dynamics modes
-  
-  else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-    is_physics_active = !is_physics_active;
+	// toggle physics/flocking dynamics modes
 
-    // spin up physics simulator
-    
-    if (is_physics_active) {
+	else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+		is_physics_active = !is_physics_active;
 
-      copy_flocker_states_to_graphics_objects();
-      initialize_bullet_simulator();
+		// spin up physics simulator
 
-    }
+		if (is_physics_active) {
 
-    // stop physics simulator
-    
-    else {
+			copy_flocker_states_to_graphics_objects();
+			initialize_bullet_simulator();
 
-      delete_bullet_simulator();
+		}
 
-    }
-  }
-  
-  // orbit rotate
+		// stop physics simulator
 
-  else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) 
-    orbit_cam_longitude_degs -= orbit_cam_delta_theta_degs;
+		else {
+
+			delete_bullet_simulator();
+
+		}
+	}
+
+	//control sj
+	// orbit rotate
+
+	else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		predator_array[0]->set_roll(spaceship_angle);
   else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    orbit_cam_longitude_degs += orbit_cam_delta_theta_degs;
-  else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-    if (orbit_cam_latitude_degs + orbit_cam_delta_theta_degs <= MAX_LATITUDE_DEGS)
-      orbit_cam_latitude_degs += orbit_cam_delta_theta_degs;
-  }
-  else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-    if (orbit_cam_latitude_degs - orbit_cam_delta_theta_degs >= MIN_LATITUDE_DEGS)
-      orbit_cam_latitude_degs -= orbit_cam_delta_theta_degs;
-  }
+		predator_array[0]->set_roll(-spaceship_angle);
+  else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) 
+		predator_array[0]->set_pitch(-spaceship_angle);
+  else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) 
+		predator_array[0]->set_pitch(spaceship_angle);
+  else if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT)) 
+		predator_array[0]->set_yaw(spaceship_angle);
+  else if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT)) 
+		predator_array[0]->set_yaw(-spaceship_angle);
+
+
+
 
   // orbit zoom in/out
 

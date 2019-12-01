@@ -54,6 +54,12 @@ public:
   void draw(glm::mat4);
   void update();
   bool compute_hungry_force();
+
+  void set_pitch(double angle);
+
+  void set_roll(double angle);
+
+  void set_yaw(double angle);
  
 };
 

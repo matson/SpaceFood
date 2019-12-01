@@ -22,7 +22,12 @@ extern GLuint ModelMatrixID;
 extern GLuint ViewMatrixID;
 extern GLuint MatrixID;
 glm::vec3 hunger_force;
+glm::vec3 spaceship_forward;
+glm::vec3 spaceship_up;
+glm::vec3 spaceship_right;
+glm::vec3 spaceship_speed; 
 
+double speed; 
 #define M_PI 3.14159
 
 //----------------------------------------------------------------------------
@@ -49,6 +54,10 @@ Predator::Predator(int _index,
 	//separation_weight = separate_weight;
 	inv_range_squared_hungry_distance = 1.0 / (max_squared_hunger_distance - min_squared_hunger_distance);
 	
+	spaceship_forward = glm::vec3(0.0f, 0.0f, -1.0f);
+	spaceship_up = glm::vec3(0.0f, 1.0f, 0.0f);
+	spaceship_right = glm::vec3(1.0f, 0.0f, 0.0f);
+	spaceship_speed = glm::vec3(0.1f, 0.1f, 0.1f);
 	//no need for cohesion (group) forces
 	
 }
@@ -251,6 +260,20 @@ bool Predator::compute_hungry_force()
 
 }
 
+void Predator::set_pitch(double angle) {
+	spaceship_forward = glm::vec3(spaceship_forward * (float)cos(angle) + spaceship_up * float(sin(angle)));
+	spaceship_up = glm::vec3(glm::cross(spaceship_right, spaceship_forward));
+}
+
+void Predator::set_roll(double angle) {
+	spaceship_right = glm::vec3(spaceship_right * (float)cos(angle) + spaceship_up * float(sin(angle)));
+	spaceship_up = glm::vec3(glm::cross(spaceship_right, spaceship_forward));
+}
+void Predator::set_yaw(double angle) {
+	spaceship_right = glm::vec3(spaceship_right * (float)cos(angle) + spaceship_forward * float(sin(angle)));
+	spaceship_forward = glm::vec3(glm::cross(spaceship_up, spaceship_right));
+}
+
 
 //----------------------------------------------------------------------------
 
@@ -266,88 +289,29 @@ bool Predator::compute_hungry_force()
 //need to finish update function in order to have it show in the box
 void Predator::update()
 {
+
 	
-	//set acceleration 
+	//double random_force_limit = 0.6;
 	acceleration = glm::vec3(0, 0, 0);
+	//glm::vec3 separation_force = glm::vec3(0, 0, 0);
+	//glm::vec3 alignment_force = glm::vec3(0, 0, 0);
+	//glm::vec3 cohesion_force = glm::vec3(0, 0, 0);
+	//compute_separation_force();
+	acceleration += spaceship_forward;
+	acceleration += spaceship_right;
+	acceleration += spaceship_up;
+	//acceleration += spaceship_speed;
 
-	//behaviors
-	compute_hungry_force();
-	acceleration += hunger_force;
-
-	draw_color.r = glm::length(hunger_force);
-	if (draw_color.r > 0) {
-		draw_color = glm::normalize(draw_color);
-	}
-	else {
-		draw_color = base_color;
-	}
-
-	// randomness
-
-	if (random_force_limit > 0.0) {
-		acceleration.x += uniform_random(-random_force_limit, random_force_limit);
-		acceleration.y += uniform_random(-random_force_limit, random_force_limit);
-		acceleration.z += uniform_random(-random_force_limit, random_force_limit);
-	}
-
-
-	// update velocity
+	
+	
 
 	new_velocity = velocity + acceleration;   // scale acceleration by dt?
-
-  // limit velocity
 
 	double mag = glm::length(new_velocity);
 	if (mag > MAX_FLOCKER_SPEED)
 		new_velocity *= (float)(MAX_FLOCKER_SPEED / mag);
 
-	// update position
-
-	new_position = position + new_velocity;   // scale new_velocity by dt?
-
-
-
-
-	
-	double random_force_limit = 0.6;
-	acceleration = glm::vec3(0, 0, 0);
-	glm::vec3 separation_force = glm::vec3(0, 0, 0);
-	glm::vec3 alignment_force = glm::vec3(0, 0, 0);
-	glm::vec3 cohesion_force = glm::vec3(0, 0, 0);
-	//compute_separation_force();
-
-
-	acceleration += 0;// separation_force;
-
-	
-	acceleration += 0;// alignment_force;
-
-	//compute_cohesion_force();
-	acceleration += 0;// cohesion_force;
-
-
-
-	
-
-	if (random_force_limit > 0.0) {
-		acceleration.x += uniform_random(-random_force_limit, random_force_limit);
-		acceleration.y += uniform_random(-random_force_limit, random_force_limit);
-		acceleration.z += uniform_random(-random_force_limit, random_force_limit);
-	}
-
-	
-
-	new_velocity = velocity + acceleration;   // scale acceleration by dt?
-
-	
-	/*
-	double mag = glm::length(new_velocity);
-	if (mag > MAX_FLOCKER_SPEED) {
-		new_velocity *= (float)(MAX_FLOCKER_SPEED / mag);
-	}
-	*/
-
-	//new_position = position + new_velocity;
+	new_position = position + new_velocity;
 }
 
 
