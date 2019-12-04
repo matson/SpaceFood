@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 //
-// "Creature Box" -- flocking app
+// "Asteroids 3d" -- flocking app
 //
-// by Christopher Rasmussen, cer@cis.udel.edu
+// by Eric Nahe, Madison Adams
 //
 //----------------------------------------------------------------------------
 
@@ -33,6 +33,7 @@ using namespace glm;
 // for loading GLSL shaders
 
 #include <common/shader.hpp>
+#include <common/text2D.hpp>
 
 // creature-specific stuff
 
@@ -105,7 +106,7 @@ glm::mat4 ViewMat;
 
 double target_FPS = 60.0;
 
-bool using_obj_program = false;
+bool using_obj_program = true;
 
 bool is_paused = false;
 bool is_physics_active = false;
@@ -123,7 +124,7 @@ int win_h = win_scale_factor * 9.0;
  
 int camera_mode = CAMERA_MODE_ORBIT;
 
-int num_flockers = 50;   // 400 is "comfortable" max on my machine
+int num_flockers = 10;   // 400 is "comfortable" max on my machine
 
 extern int flocker_history_length;
 extern int predator_history_length;
@@ -399,7 +400,7 @@ void initialize_flocking_simulation()
 	}
 	//no need for looping
 	
-	predator_array.push_back(new Predator(0, 2.0, 4.0, 4.0,
+	predator_array.push_back(new Predator(0, uniform_random(0, box_width), uniform_random(0, box_height), uniform_random(0, box_depth),
 		uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01), uniform_random(-0.01, 0.01), 0.002,
 		1.0, 1.5, uniform_random(0.01, 0.03), 1.0, 1.0, 1.0, 30));
 	
@@ -421,17 +422,21 @@ void update_flocking_simulation()
 
   // get new_position, new_velocity for each flocker
 
-  for (i = 0; i < flocker_array.size(); i++) 
-    flocker_array[4]->update(); //draws only one.
-
-  predator_array[0]->update();  //update done here for predator.
+  for (i = 0; i < flocker_array.size(); i++) {
+	  flocker_array[4]->update(); //draws only one.
+	  predator_array[0]->update();  //update done here for predator.
+  }
+  
   
 
-  for (i = 0; i < flocker_array.size(); i++) 
+  for (i = 0; i < flocker_array.size(); i++) {
+	  
     flocker_array[i]->finalize_update(box_width, box_height, box_depth);
+	predator_array[0]->finalize_update(box_width, box_height, box_depth);
+  }
 
   
-  predator_array[0]->finalize_update(box_width, box_height, box_depth);
+ 
 }
 
 //----------------------------------------------------------------------------
@@ -483,8 +488,8 @@ void setup_camera()
 void load_objects_and_textures(int argc, char **argv)
 {
   if (argc == 1) {
-    loadOBJ("apple.obj", obj_vertices, obj_uvs, obj_normals);
-    obj_Texture = loadDDS("apple_texture.DDS"); //works for this shape?
+    loadOBJ("apple_openGL.obj", obj_vertices, obj_uvs, obj_normals);
+    obj_Texture = loadBMP_custom("apple_paint.bmp"); //works for this shape?
   }
   else if (!strcmp("cube", argv[1])) {
     loadOBJ("apple_success.obj", obj_vertices, obj_uvs, obj_normals);
@@ -507,9 +512,9 @@ void load_objects_and_textures(int argc, char **argv)
   
   if (argc < 3) {
     for (int i = 0; i < obj_vertices.size(); i++) {
-      obj_vertices[i].x *= 2.15;
-      obj_vertices[i].y *= 2.15;
-      obj_vertices[i].z *= 2.15;
+      obj_vertices[i].x *= 3.5;
+      obj_vertices[i].y *= 3.5;
+      obj_vertices[i].z *= 3.5;
     }
   }
   
@@ -623,6 +628,8 @@ int main(int argc, char **argv)
   
   load_objects_and_textures(argc, argv);
 
+  initText2D("Holstein.DDS");
+
   // simulation
 
   initialize_random();
@@ -687,6 +694,9 @@ int main(int argc, char **argv)
 	
 		predator_array[0]->draw(M); //future rocket
 		//need to reference the predator
+	char text[256];
+	sprintf(text, "Score %.2f", glfwGetTime());
+	printText2D(text, 10, 500, 60);
 
 
     // busy wait if we are going too fast

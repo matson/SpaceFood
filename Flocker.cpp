@@ -27,7 +27,7 @@
 //----------------------------------------------------------------------------
 
 int flocker_history_length = 30;
-int flocker_draw_mode = DRAW_MODE_POLY;
+int flocker_draw_mode = DRAW_MODE_OBJ;
 vector <Flocker *> flocker_array;  
 extern vector <Predator*> predator_array;
 vector <vector <double> > flocker_squared_distance;
