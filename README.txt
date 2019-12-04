@@ -1,12 +1,18 @@
-Comments on Hunger and Fear force:
+Comments on SpaceFood Project:
 
-Predator: used the same draw mode as the "arrowhead" flock mode.  Changed the color and size of predator, should be yellow/purple and bigger than flockers.
+Environement consisting of 3-D Objects: Both our spaceship and space food (Apple) are 
+3d models
 
-Hunger Force: Used a function to compute the hunger force.  Passed the variables through the Predator constructor to use them.
-Goal was to calculate the minimal distance from the predator to the flocker and set it to move in that direction. 
-To do this I needed to loop through each of the flocker's distances and take the smallest 
-one. Then that was set to the direction the predator must follow.  I used the same functionalities similar to the cohesion force for flockers.
+User Control: You can controll the plane's roll, pitch, and yaw by using the 
+QWEASD keys (WS control pitch, AD controls pitch, QE controls roll)
 
-Fear Force: The total opposite; first defined function and passed through the contructor.
-Goal was to calculate the separation force, and check the position of the predator to do this calculation.  
-Then set a boolean to compare values and if predator is "close" the fear force is present
+Objects Move Smoothly: Spaceship and Food Move smoothly
+
+Texture Mapped Element: our food has a texture mapping. 
+
+Lit 3-D Element: our apple is lit with diffuse lighting
+
+Text overlay: We implemented a score counter which increases with the time the game 
+is played for. 
+
+Complex 3-D Element: our apple is not a simple 3D shape. 
