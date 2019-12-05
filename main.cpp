@@ -422,19 +422,19 @@ void update_flocking_simulation()
 
   // get new_position, new_velocity for each flocker
 
-  for (i = 0; i < flocker_array.size(); i++) {
-	  flocker_array[4]->update(); //draws only one.
-	  predator_array[0]->update();  //update done here for predator.
+  for (i = 0; i < flocker_array.size() -1; i++) {
+	  flocker_array[i]->update(); 
+	 
   }
-  
+  predator_array[0]->update();  //update done here for predator.
   
 
   for (i = 0; i < flocker_array.size(); i++) {
 	  
     flocker_array[i]->finalize_update(box_width, box_height, box_depth);
-	predator_array[0]->finalize_update(box_width, box_height, box_depth);
+	
   }
-
+  predator_array[0]->finalize_update(box_width, box_height, box_depth);
   
  
 }
